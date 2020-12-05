@@ -1,6 +1,6 @@
 package advent.of.code
 
-class App {
+class Day02 {
     static void main(String[] args) {
         println new File("../input").readLines().count { line ->
             def ( _, low, high, c, data) = ( line =~ /(\d+)-(\d+)\s+(\w):\s+(\w+)/)[0]
