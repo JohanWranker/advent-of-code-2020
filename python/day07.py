@@ -1,6 +1,6 @@
 import os
 import re
-print("day06")
+print("day07")
 
 path = "input"
 if not os.path.exists(path):
@@ -10,7 +10,7 @@ if not os.path.exists(path):
 bagTable = {}
 
 groups = [x.split("\n") for x in open(path).read().split("\n\n")]
-print(groups)
+# print(groups)
 
 def addTuples(tt):
     tup = []
@@ -24,9 +24,8 @@ def addTuples(tt):
     return tup
 
 for group in groups:
-    pass
     for g in group:
-        print(f"content {g}")
+        # print(f"content {g}")
         m = re.match(r"(.*)s\scontain\s((\d).*)", g)
         if m is not None:
             bagTable[m.group(1)] = addTuples( m.group(2))
@@ -37,35 +36,23 @@ for group in groups:
         elif g == "":
             pass
         else:
-            print 
             assert False
 
 
-def bagContainsShine(bag, depth, number):
+def bagContainsShine(bag, depth):
     count = 0
-    # print(f" ##{bag}##")
     bag = bag.strip()
     if not bag in bagTable:
         bag = bag[:-1]
     assert (bag in bagTable), f"'{bag}' not found"
+    
     if len(bagTable[bag]) == 0:
-        print("   "*depth + f"{bag} * {number} of empty")
-        return number
+        print("   "*depth + f"{bag} empty")
+        return 1
     for bb in bagTable[bag]:
-        # print("   "*depth + bb[0])
-        #if bag == 'shiny gold bag':
-        cc = bagContainsShine(bb[0], depth+1, bb[1])
-        print("   "*depth + f"{bb[0]}:{cc}" )
-        #    count = 0
-        count += cc
-        #found = found or bagContainsShine(bb[0], depth +1)
-    ttoal = (count+1) * number
-    print("   "*depth + f"Total {bag} contains {ttoal}")
-    return ttoal
-
-# print (bagTable)
-# print (bagTable)
-bag = 'shiny gold bag'
-count = bagContainsShine(bag, 0, 1) -1
+        count += bagContainsShine(bb[0], depth+1) * bb[1]
+    print("   "*depth + f"Total {bag} contains {count} + 1 ")
+    return (count+1)
+count = bagContainsShine('shiny gold bag', 0) -1
 
 print(count)
