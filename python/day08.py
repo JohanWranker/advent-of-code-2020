@@ -1,7 +1,7 @@
 import os
 import re
 import copy
-print("day07")
+print("day08")
 
 path = "input"
 if not os.path.exists(path):
@@ -11,8 +11,14 @@ if not os.path.exists(path):
 
 pc =0
 accumulator = 0
-groups = [x.split("\n") for x in open(path).read().split("\n\n")]
 program = []
+posToUpdate = 0
+groups = [x.split("\n") for x in open(path).read().split("\n\n")]
+for group in groups:
+    for g in group:
+        print(f"content {g}")
+        program.append(g.split(' '))
+
 
 def acc(value):
     global accumulator
@@ -37,14 +43,7 @@ code = {
     "nop": nop,
 }
 
-for group in groups:
-    for g in group:
-        print(f"content {g}")
-        program.append(g.split(' '))
-
-print (program)
 orgPrgram = copy.deepcopy(program)
-posToUpdate = 0
     
 while(pc != len(program)):
     pc =0
