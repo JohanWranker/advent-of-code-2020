@@ -8,47 +8,47 @@ if not os.path.exists(path):
     exit(1)
 
 data = [int(x) for x in open(path).readlines()]
-print(data)
 data.append(0)
 d = sorted(data)
 
-print(data)
-
-print(d)
 next =d[1:]
 print(next)
 next.append(next[-1]+3)
 
 table = zip(d, next)
 print(table)
+
 global diff
 diff = [y-x for x,y in table]
-print(diff)
-print(diff.count(1))
-print(diff.count(3))
-print(diff.count(1)*diff.count(3))
+print(f"first mission {diff.count(1)*diff.count(3)}")
 
-valid = []
-def nextStep(output, index):
-    global diff
-    # print (output)
-    if index >= len(diff):
-        # print(f"miss")
-        return
-        
-    if output[-1] < d[index]-3:
-        # print(f"to big {output[-1]} {d[index]}")
-        return
-    output.append(d[index])
-    if output[-1] == d[-1]:
-        valid.append(output)
-        return
+count = 0
+def wayto22(val):
+    ret = 0
+    if val == d[-1]:
+        return 1
     for step in range(1,4):
-        bbbbb= copy.deepcopy(output)
-        nextStep(bbbbb, index+step)
+        if val+step in d:
+            ret += wayto22(val+step)
+    return ret
+    
+# r = wayto22(0)
 
-hhh = nextStep([0],1)
-for x in valid:
-    print(x)
-#print(valid)
-print(len(valid))
+mult = {d[-1] : 1}
+# multi = 1
+
+for val in reversed(d[0:-1]):
+    ret = 0
+    for step in range(1,4):
+        if val+step in mult:
+            print(f"found {val+step} ")
+            ret += mult[val+step]
+            
+            # print(f"found {val+step} {ret} {mult}")
+            # exit(0)
+    mult[val] = ret
+
+print(d)
+print(f"ways {mult} ")
+
+print(f"ways {multi} ")
