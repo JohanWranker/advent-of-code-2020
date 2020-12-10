@@ -33,5 +33,5 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'advent.of.code.Day03'
+    mainClass = 'advent.of.code.Day04'
 }
