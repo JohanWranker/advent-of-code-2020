@@ -5,12 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "groovy",
-            "name": "Debug (Launch) groovy",
+            "name": "Python: Current File",
+            "type": "python",
             "request": "launch",
-            "mainClass": "advent.of.code.Day03"
+            "program": "${file}",
+            "console": "integratedTerminal"
         },
-
         {
             "name": "(gdb) Launch",
             "type": "cppdbg",
