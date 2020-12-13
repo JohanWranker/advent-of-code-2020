@@ -11,33 +11,50 @@ if not os.path.exists(path):
     exit(1)
 rawtext = open(path).readlines()
 
-data = ["."*4 +x.strip() + "."*4 for x in rawtext]
-floor = ["."*len(data[0])]*4
-emptySlot = ['LLL', '.LL', '.L.', 'LL.']
-overCOccupied = ['XXXX']
-output = floor + data + floor
-while (True):
-    seats = copy.deepcopy(output)
-    transposed = [''.join(seats[j][i] for j in range(len(seats))) for i in range(len(seats[0]))] 
-    output = []
-    for rowId in range(len(seats)):
-        out = list(seats[rowId])
-        if rowId >= 4 and rowId <= len(seats)-4:
-            for seatId in range(4, len(seats[0])-4):
-                a = seats[rowId][seatId-1:seatId+2]
-                if seats[rowId][seatId-1:seatId+2] in emptySlot:
-                    b = transposed[seatId][rowId-1:rowId+2]
-                    if transposed[seatId][rowId-1:rowId+2] in emptySlot:
-                        out[seatId] = 'X'
-                c = seats[rowId][seatId-3:seatId+1]
-                d = seats[rowId][seatId:seatId+4]
-                if seats[rowId][seatId-3:seatId+1] in overCOccupied or \
-                    seats[rowId][seatId:seatId+4] in overCOccupied:
-                    out[seatId] = 'L'
-                if transposed[seatId][rowId-3:rowId+1] in overCOccupied or \
-                    transposed[seatId][rowId:rowId+4] in overCOccupied:
-                    out[seatId] = 'L'
-        output.append(''.join(out))
+seats = [list(x.strip()) for x in rawtext]
 
-    for x in output:
-        print(x)
+directions = [ [1,0], [-1,0], [0,1], [0,-1], [1,1], [-1,-1], [1,-1], [-1,1] ]
+
+def isOccupied(rowId, seatId, direction):
+    y = direction[0]+ rowId
+    x = direction[1]+ seatId
+    if x < 0 or x >= len(seats[0]) or \
+        y < 0 or y >= len(seats):
+        return False
+    if seats[y][x] != '.':
+        return seats[y][x] == 'X'
+    return isOccupied(y,x,direction)
+
+output = seats
+updated = True
+loop = 0
+while (updated):
+    loop +=1
+    updated = False
+    seats = copy.deepcopy(output)
+    for rowId in range(len(seats)):
+        for seatId in range(len(seats[0])):
+            # Test if empty
+            if seats[rowId][seatId] == 'L':
+                for d in directions:
+                    if isOccupied(rowId, seatId, d):
+                        break
+                else: 
+                    output[rowId][seatId] = 'X'
+                    updated = True
+            # test if leave
+            elif seats[rowId][seatId] == 'X':
+                count = 0
+                for d in directions:
+                    count += 1 if isOccupied(rowId, seatId, d) else 0
+                if count >= 5:
+                    output[rowId][seatId] = 'L'
+                    updated = True
+    
+    # for x in output:
+    #    print(''.join(x))
+    # print(f"{loop}")
+count = sum(x.count('X') for x in output)
+
+print(f"count {count}")
+assert 2197 == count
